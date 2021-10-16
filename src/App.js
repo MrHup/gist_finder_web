@@ -33,9 +33,15 @@ function App() {
           setOutput(result);
           setQuery('');
           console.log(result);
+          for (let i = 0; i < result.length; i++)
+          {
+            fetch(`${result[i].forks_url}`)
+              .then(resFork => resFork.json())
+              .then(resultFork => {
+                console.log(resultFork);
+              });
+          }
          });
-      
-        
     }
   }
 
