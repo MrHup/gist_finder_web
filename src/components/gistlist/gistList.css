@@ -1,6 +1,7 @@
 .container-gist{
     list-style-type: none;
     background-color: rgb(238, 238, 238);
+    border-radius: 18px;
     
     width: 100%;
     padding: 12px 20px;
@@ -16,4 +17,39 @@
     width: 50%;
     display: inline-block;
     padding: 12px 20px;
+}
+
+.language-tag-list{
+    padding: 10px 0px 0px;
+    list-style-type: none;
+}
+
+.language-tag{
+    background-color: #ff9955;
+    display: inline-block;
+    border-radius: 18px;
+    padding: 8px 10px;
+    margin:0px 0px 0px 5px;
+    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-image{
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+}
+
+.forked-bubbles-list{
+    padding: 10px 0px 0px;
+    list-style-type: none;
+    display: inline-block;
+    text-align: end;
+}
+
+.forked-bubble{
+    display: inline-block;
+}
+
+.forked-bubbles-list-li{
+    text-align: end;
 }

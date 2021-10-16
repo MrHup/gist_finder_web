@@ -54,5 +54,9 @@ input[type=text] {
   background-repeat: no-repeat;
   padding-left: 40px;
   background-image: url('./assets/search_icon.svg');
-  
+}
+
+.loading-bar{
+  color: #ff9955;
+  padding: 200px 20px;
 }

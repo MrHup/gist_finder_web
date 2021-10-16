@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from "./components/header/Header";
 import GistList from "./components/gistlist/GistList";
+import { BallBeat } from 'react-pure-loaders';
 
 import './App.css';
 
@@ -11,14 +12,16 @@ const api = {
 function App() {
   const [query, setQuery] = useState('');
   const [output, setOutput] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const search = evt => {
     if (evt.key === "Enter")
     {
+      setOutput({});
+      setLoading(true);
       fetch(`${api.base}users/${query}/gists`)
         .then(res => res.json())
         .then(result => {
-          setOutput(result);
           setQuery('');
           console.log(result);
           for (let i = 0; i < result.length; i++)
@@ -28,10 +31,12 @@ function App() {
               .then(resultFork => {
                 console.log(resultFork);
                 result[i].forks_objects = resultFork;
-                setOutput(result);
+                if (i === result.length-1) {
+                  setOutput(result);
+                  setLoading(false);
+                }
               });
           }
-          setOutput(result);
          });
     }
   }
@@ -49,11 +54,16 @@ function App() {
             onKeyPress={search}
           />
           <div className="gist-list">
+            {loading && <div className="loading-bar">
+                <BallBeat
+                  color={'#ff9955'}
+                  loading={loading}/> 
+              </div>}
             <GistList gistListObjects={output}/>
           </div>
         </div>
         <div className="page-footer">
-    
+
         </div>
       </main>
     </div>
