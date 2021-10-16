@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 export default function GistList({ gistListObjects }) {
-    const [forkedObj, setForkedObj] = useState({});
 
     // receives a gist object
     // returns an array of files contained in the given gist
@@ -32,14 +31,14 @@ export default function GistList({ gistListObjects }) {
     const api = {base: "https://api.github.com/"}
     // receives a gist object
     // returns a list of fork objects
-    const forkObjects = (object) => {
-        fetch(`${object.forks_url}`)
-            .then(res => res.json())
-            .then(result => {
-                setForkedObj(result);
-                console.log(result);
-            });
-    };
+    // const forkObjects = (object) => {
+    //     fetch(`${object.forks_url}`)
+    //         .then(res => res.json())
+    //         .then(result => {
+    //             setForkedObj(result);
+    //             console.log(result);
+    //         });
+    // };
 
     return (
       <div>

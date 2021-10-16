@@ -11,6 +11,18 @@ const api = {
 function App() {
   const [query, setQuery] = useState('');
   const [output, setOutput] = useState({});
+  const [forkedObj, setForkedObj] = useState({});
+
+  // receives a gist object
+  // returns a list of fork objects
+  const forkObjects = (object) => {
+    fetch(`${object.forks_url}`)
+        .then(res => res.json())
+        .then(result => {
+            setForkedObj(result);
+            console.log(result);
+        });
+  };
 
   const search = evt => {
     if (evt.key === "Enter")
@@ -22,6 +34,8 @@ function App() {
           setQuery('');
           console.log(result);
          });
+      
+        
     }
   }
 
