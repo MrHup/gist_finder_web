@@ -1,0 +1,17 @@
+.container {
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 0fr 1fr 0fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      ". . ."
+      ". title-logo ."
+      ". . ."; 
+  }
+.title-logo { 
+    grid-area: title-logo; 
+    padding: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}

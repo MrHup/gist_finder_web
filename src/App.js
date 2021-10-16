@@ -11,7 +11,6 @@ const api = {
 function App() {
   const [query, setQuery] = useState('');
   const [output, setOutput] = useState({});
-  const [forkedObj, setForkedObj] = useState({});
 
   const search = evt => {
     if (evt.key === "Enter")
@@ -22,41 +21,40 @@ function App() {
           setOutput(result);
           setQuery('');
           console.log(result);
-          var forkList = [];
           for (let i = 0; i < result.length; i++)
           {
             fetch(`${result[i].forks_url}`)
               .then(resFork => resFork.json())
               .then(resultFork => {
                 console.log(resultFork);
-                forkList.push(resultFork);
-                setForkedObj(forkList);
-
                 result[i].forks_objects = resultFork;
                 setOutput(result);
               });
           }
+          setOutput(result);
          });
     }
   }
 
   return (
-    <div className="App">
+    <div>
       <main>
-        <Header/>
-        <div className="search-box">
-          <input
+        <Header className="page-header"/>
+        <div className="page-main">
+          <input className="textbox-main"
             type="text"
-            className="search-bar"
             placeholder="Search..."
             onChange={e=>setQuery(e.target.value)}
             value={query}
             onKeyPress={search}
           />
+          <div className="gist-list">
+            <GistList gistListObjects={output}/>
+          </div>
         </div>
-
-        <GistList gistListObjects={output} forkedObjects={forkedObj} />
-
+        <div className="page-footer">
+    
+        </div>
       </main>
     </div>
   );

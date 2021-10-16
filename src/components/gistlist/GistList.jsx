@@ -1,6 +1,8 @@
 import React from "react";
 
-export default function GistList({ gistListObjects, forkedObjects }) {
+import "./gistList.css";
+
+export default function GistList({ gistListObjects }) {
 
     // receives a gist object
     // returns an array of files contained in the given gist
@@ -24,9 +26,12 @@ export default function GistList({ gistListObjects, forkedObjects }) {
         return languages;
     };
 
+    // receives a gist object
+    // returns the latest 3 users that forked the given gist
     const getLatestForkAuthors = (object) => {
         var authors = [];
-        for (let i = 0; i < 3 && i < object.forks_objects.length; i++)
+        for (let i = 0; i < 3 && 
+            typeof object.forks_objects != "undefined" && i < object.forks_objects.length; i++)
         {
             authors.push(object.forks_objects[i].owner.login);
         }
@@ -39,7 +44,7 @@ export default function GistList({ gistListObjects, forkedObjects }) {
         <div>
           <div className="output-box">
             <div className="author-box">{gistListObjects[0].owner.login}</div>
-            <table className="table table-striped table-bordered">
+            {/* <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Gist name</th>
@@ -56,7 +61,18 @@ export default function GistList({ gistListObjects, forkedObjects }) {
                         </tr>
                     )}
                 </tbody>
-            </table>
+            </table> */}
+
+            <ul className="container-list">
+            {gistListObjects && gistListObjects.map(output =>
+                    <div className="container-gist">
+                            <li>{output.description}</li>
+                            <li> {computeTags(output)} </li>
+                            <li>{getLatestForkAuthors(output)}</li>
+                    </div>
+                        
+                    )}
+            </ul>
           </div>
         </div>
         ) : ('')}
