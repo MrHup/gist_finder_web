@@ -13,17 +13,6 @@ function App() {
   const [output, setOutput] = useState({});
   const [forkedObj, setForkedObj] = useState({});
 
-  // receives a gist object
-  // returns a list of fork objects
-  const forkObjects = (object) => {
-    fetch(`${object.forks_url}`)
-        .then(res => res.json())
-        .then(result => {
-            setForkedObj(result);
-            console.log(result);
-        });
-  };
-
   const search = evt => {
     if (evt.key === "Enter")
     {
@@ -33,12 +22,18 @@ function App() {
           setOutput(result);
           setQuery('');
           console.log(result);
+          var forkList = [];
           for (let i = 0; i < result.length; i++)
           {
             fetch(`${result[i].forks_url}`)
               .then(resFork => resFork.json())
               .then(resultFork => {
                 console.log(resultFork);
+                forkList.push(resultFork);
+                setForkedObj(forkList);
+
+                result[i].forks_objects = resultFork;
+                setOutput(result);
               });
           }
          });
@@ -60,7 +55,7 @@ function App() {
           />
         </div>
 
-        <GistList gistListObjects={output} />
+        <GistList gistListObjects={output} forkedObjects={forkedObj} />
 
       </main>
     </div>
