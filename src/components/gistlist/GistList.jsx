@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState, useReducer } from "react";
 
 import "./gistList.css";
+import Popup from "../popupbox/PopupBox";
 
 export default function GistList({ gistListObjects }) {
+    // in order to force render if needed
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+    // to control popup system
+    const [isOpen, setIsOpen] = useState(false);
+    const [popupTextMain, setPopupTextMain] = useState("");
+    const [popupTextTitle, setPopupTextTitle] = useState("");
 
     // receives a gist object
     // returns an array of files contained in the given gist
@@ -39,9 +46,23 @@ export default function GistList({ gistListObjects }) {
         return authors;
     };
 
-    function sayHello(object) {
-        alert(object.description);
-      }
+    const togglePopup = (object) => {
+        if (typeof object != "undefined") {
+            const files = gistFiles(object);
+            fetch(`${files[0].raw_url}`)
+                .then(res => res.text())
+                .then(response => {
+                    console.log(response);
+                    setPopupTextMain(response);
+                    forceUpdate();
+                });
+
+            setPopupTextTitle(files[0].filename)
+        }
+        // update with a list of text blocks
+        
+        setIsOpen(!isOpen);
+    }
 
     return (
       <div>
@@ -49,10 +70,18 @@ export default function GistList({ gistListObjects }) {
         <div>
           <div className="output-box">
             {/* <div className="author-box">{gistListObjects[0].owner.login}</div> */}
-
+            {isOpen && <Popup
+                content={<div>
+                    <b>{popupTextTitle}</b>
+                    <p/>
+                    <code className="code-snippet">{popupTextMain}</code>
+                </div>}
+                handleClose={() => togglePopup()}
+            />}
             <ul className="container-list">
             {gistListObjects && gistListObjects.map(output =>
-                    <div className="container-gist" onClick={() => sayHello(output)}>
+                    <div>
+                    <div className="container-gist" onClick={() => togglePopup(output)}>
                             <li>{output.description}</li>
                             <li> 
                                 <ul className="language-tag-list">
@@ -75,7 +104,8 @@ export default function GistList({ gistListObjects }) {
                             </li>
                             {/* <li>{getLatestForkAuthors(output)}</li> */}
                     </div>
-                        
+                    {/* {(output && typeof output.expanded != "undefined") && <div>Works as expected</div>} */}
+                    </div>
                     )}
             </ul>
           </div>

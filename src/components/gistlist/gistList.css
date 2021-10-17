@@ -53,3 +53,8 @@
 .forked-bubbles-list-li{
     text-align: end;
 }
+
+.code-snippet{
+    word-wrap: break-word;
+    overflow: scroll;
+}
