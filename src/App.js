@@ -14,11 +14,14 @@ function App() {
   const [output, setOutput] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const search = evt => {
-    if (evt.key === "Enter")
-    {
-      setOutput({});
+  const search_func = () => {
+    setOutput({});
       setLoading(true);
+      if (query === "")
+      {
+        setOutput({});
+        setLoading(false);
+      }
       fetch(`${api.base}users/${query}/gists`)
         .then(res => res.json())
         .then(result => {
@@ -37,8 +40,11 @@ function App() {
                 }
               });
           }
-         });
-    }
+      });
+  }
+
+  const search = evt => {
+    if (evt.key === "Enter") search_func();
   }
 
   return (
@@ -53,6 +59,7 @@ function App() {
             value={query}
             onKeyPress={search}
           />
+           <button onClick={search_func} className="button">Find</button> 
           <div className="gist-list">
             {loading && <div className="loading-bar">
                 <BallBeat
@@ -63,7 +70,7 @@ function App() {
           </div>
         </div>
         <div className="page-footer">
-
+          2021 @ Flavius Holerga
         </div>
       </main>
     </div>

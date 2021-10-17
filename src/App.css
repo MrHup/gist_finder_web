@@ -21,7 +21,6 @@
 .page-main {
   grid-area: main;
   width: 100%;
-  /* background-color: #b42222; */
   text-align:center;
 }
 
@@ -30,17 +29,27 @@
   margin-right: auto;
 }
 
-.page-footer {
-  grid-area: footer;
-  /* background-color: blue; */
-  width: 205px;
-}
-
 .gist-list {
   text-align:center;
   
   margin-left: auto;
   margin-right: auto;
+}
+
+.button {
+  background-color: #ff9955; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 32px;
+  margin-left: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #ff9955bb; /* Green */
 }
 
 input[type=text] {
@@ -59,4 +68,14 @@ input[type=text] {
 .loading-bar{
   color: #ff9955;
   padding: 200px 20px;
+}
+
+.page-footer {
+  grid-area: footer;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  color: rgba(5, 0, 0, 0.336);
+  text-align: center;
 }

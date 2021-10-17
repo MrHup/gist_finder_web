@@ -1,15 +1,15 @@
-import React, { useState, useReducer } from "react";
+import React, { useState } from "react";
 
 import "./gistList.css";
 import Popup from "../popupbox/PopupBox";
+import { BallBeat } from 'react-pure-loaders';
 
 export default function GistList({ gistListObjects }) {
-    // in order to force render if needed
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     // to control popup system
     const [isOpen, setIsOpen] = useState(false);
-    const [popupTextMain, setPopupTextMain] = useState("");
-    const [popupTextTitle, setPopupTextTitle] = useState("");
+
+    const [popupTextBlockList, setPopupTextBlockList] = useState({});
+    const [loading, setLoading] = useState(false);
 
     // receives a gist object
     // returns an array of files contained in the given gist
@@ -46,21 +46,41 @@ export default function GistList({ gistListObjects }) {
         return authors;
     };
 
-    const togglePopup = (object) => {
-        if (typeof object != "undefined") {
-            const files = gistFiles(object);
-            fetch(`${files[0].raw_url}`)
+    // builds the file content popup
+    const getAllSnippetsForObject = (object) => {
+        var textChunks = [];
+        setPopupTextBlockList([]);
+        // get all files contained in the given gist
+        setLoading(true);
+        const files = gistFiles(object);
+        for (let i = 0; i < files.length; i++)
+        {
+            
+            fetch(`${files[i].raw_url}`)
                 .then(res => res.text())
                 .then(response => {
-                    console.log(response);
-                    setPopupTextMain(response);
-                    forceUpdate();
+                    const info = {
+                        maincode: response,
+                        title: files[i].filename
+                    }
+                    textChunks.push(info);
+                    // console.log(textChunks);
+                    if (i === files.length-1)
+                    {
+                        setPopupTextBlockList([]);
+                        setPopupTextBlockList(textChunks);
+                        console.log(`Of size: ${textChunks.length}`);
+                        setLoading(false);
+                        // forceUpdate();
+                    }
                 });
-
-            setPopupTextTitle(files[0].filename)
         }
-        // update with a list of text blocks
-        
+    };
+
+    const togglePopup = (object) => {
+        if (typeof object != "undefined") {
+            getAllSnippetsForObject(object);
+        }
         setIsOpen(!isOpen);
     }
 
@@ -70,11 +90,20 @@ export default function GistList({ gistListObjects }) {
         <div>
           <div className="output-box">
             {/* <div className="author-box">{gistListObjects[0].owner.login}</div> */}
-            {isOpen && <Popup
+            
+            {isOpen && 
+                <Popup
                 content={<div>
-                    <b>{popupTextTitle}</b>
-                    <p/>
-                    <code className="code-snippet">{popupTextMain}</code>
+                    {loading && <div className="loading-bar">
+                    <BallBeat
+                    color={'#ff9955'}
+                    loading={loading}/> 
+                    </div>}
+                    
+                    {!loading && <code className="code-snippet">{
+                        popupTextBlockList.map(textBlock => <div><b>{textBlock.title}</b>
+                            <p/><div className="block-of-text">{textBlock.maincode}</div></div>)
+                    }</code>}
                 </div>}
                 handleClose={() => togglePopup()}
             />}
